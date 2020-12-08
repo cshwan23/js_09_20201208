@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8">
+	<title></title>
+	<script type="text/javascript" src="prac_21_1_js.js"></script>
+	<script type="text/javascript">
+	
+
+		//--------------------
+		// 생일 클릭 값 변경시(onchange)
+		// 존재하는 생일 년월일인지
+		//-------------------- 
+		function checkBirthday(){
+
+			var year = document.memberRegForm.birth_year.value;
+			var month = document.memberRegForm.birth_month.value;
+			var date = document.memberRegForm.birth_date.value;
+
+			if(year==""||month==""||date==""){
+				return;
+			}
+
+			if (is_valid_YMD(year, month, date)==false){
+
+				var xxx = confirm("존재하지 않는 일수입니다. 마지막 일수로 바꿀까요?");
+
+				if(xxx){
+					var myLastDate = new Date(year,month,0);
+					var myLastDate_1 = myLastDate.getDate();
+
+					document.memberRegForm.birth_date.value = myLastDate_1;
+
+				}else{
+					document.memberRegForm.birth_year.value="";
+					document.memberRegForm.birth_month.value="";
+					document.memberRegForm.birth_date.value="";
+				}
+
+
+			}
+
+
+
+
+
+
+
+
+		}
+
+
+
+
+
+		//--------------------
+		//저장버튼 왼쪽 마우스 클릭시(onclick)
+		//--------------------
+		function checkForm(){
+
+
+
+			// 아이디 유효성 체크
+			var uid = document.memberRegForm.uid.value;
+
+			if(checkID(uid)==false){
+
+				document.memberRegForm.uid.value = "";
+				document.memberRegForm.uid.focus();
+				return;
+			}
+
+
+			// 암호 유효성 체크
+			var pwd = document.memberRegForm.pwd.value;
+
+			if(checkPwd(pwd)==false){
+
+				document.memberRegForm.pwd.value = "";
+				document.memberRegForm.pwd.focus();
+				return;
+			}
+
+
+			// 암호 확인 체크
+			var pwd_confirm = document.memberRegForm.pwd_confirm.value;
+
+			if(pwd != pwd_confirm){
+				alert("암호확인이 맞지 않습니다.")
+				document.memberRegForm.pwd_confirm.value="";
+				document.memberRegForm.pwd_confirm.focus();
+				return;
+			}
+
+
+			// 스킬 유효성 체크 1개 이상 선택
+			// 0개 선택 했을 때 
+			if(getCheckedCnt(document.memberRegForm.skill)==0){
+				alert("스킬은 한개 이상 선택하세요~");
+				return;
+			}
+
+			// 학력 유효성 체크 1개 선택
+			// 0개 선택 시 
+			if(getCheckedCnt(document.memberRegForm.school)==0){
+				alert("최종학력 한개 필수 선택하세요~");
+				return;
+			}
+
+
+			//거주지 유효성 체크
+			var addr = document.memberRegForm.addr.value;
+
+			if(addr==""){
+				alert("거주지 입력 요망");
+				return;
+			}
+
+			//생년월일 유효성 체크
+			var birth_year = document.memberRegForm.birth_year.value;
+			var birth_month = document.memberRegForm.birth_month.value;
+			var birth_date = document.memberRegForm.birth_date.value;
+
+			checkBirthday();
+
+			if(birth_year==""){
+				alert("생일 년도 입력 요망");
+				return;
+			}
+			if(birth_month==""){
+				alert("생일 월 입력 요망");
+				return;
+			}
+			if(birth_date==""){
+				alert("생일 일 입력요망");
+				return;
+			}
+
+			// 주민번호 유효성 체크
+			var jumin_num = document.memberRegForm.jumin_num.value;
+
+			if(is_valid_jumin_num(jumin_num)==false){
+
+				document.memberRegForm.jumin_num.value="";
+				return;
+
+
+			}
+
+			//사진 유효성 체크
+
+			var pic = document.memberRegForm.pic.value;
+
+			if(pic==""){
+				alert("사진 첨부는 필수입니다.");
+				return;
+			}
+
+
+			// 경력 유효성 체크
+
+			var company_name = document.memberRegForm.company_name.value;
+			var jikup = document.memberRegForm.jikup.value;
+			var salary = document.memberRegForm.salary.value;
+
+			if(isEmpty(company_name)!=true||isEmpty(jikup)!=true||isEmpty(salary)!=true){
+
+				if(new RegExp(/^[^]+$/).test(company_name)==false){
+					alert("(경력이 있다면)회사명이 비어있거나 공백이 있으면 안됩니다.");
+					document.memberRegForm.company_name.value="";
+					return;
+				}
+				if(new RegExp(/^[a-z가-힣A-Z0-9]+$/).test(company_name)==false){
+					alert("회사명은 숫자,한글,영소대문자로만 구성되어야합니다.");
+					document.memberRegForm.company_name.value="";
+					return;
+				}
+
+				if(new RegExp(/^[^]+$/).test(salary)==false){
+					alert("(경력이 있다면)연봉은 비어있거나 공백이 있으면 안됩니다.");
+					document.memberRegForm.salary.value="";
+					return;
+				}
+				if(new RegExp(/^[1-9][0-9]*$/).test(salary)==false){
+					alert("연봉은 숫자로만 구성되어야 합니다.");
+					document.memberRegForm.salary.value="";
+					return;
+				}
+
+
+			}
+
+
+
+			//숙지사항 유효성 체크 
+			var is_confirm = document.memberRegForm.is_confirm;
+
+			if(getCheckedCnt(document.memberRegForm.is_confirm)==0){
+				alert("숙지사항 체크는 필수입니다.");
+				return;
+			}
+
+			//submit() : form태그 내부의 모든 입력양식의 name 값과 value 값을 웹서버로 전송하는 메소드   
+			document.memberRegForm.submit();
+
+		}
+
+
+
+
+
+
+	</script>
+</head>
+<body>
+	<!-- 입력 양식 관련 태그들을 하나로 묶기 위한 form 태그 선언하기 -->
+	<form name="memberRegForm" action="http://naver.com" enctype="mdultipart/form-data" method="post">
+		<table border="1" cellpadding="5">
+			<caption>회원가입</caption>
+			<!-- 1행 -->
+			<tr>
+				<th>아이디 
+				<td><input type="text" name="uid" size="20" maxlength="15" value="">
+			</tr>
+
+			<!-- 2행 -->
+			<tr>
+				<th>암호 
+				<td><input type="password" name="pwd" size="20" maxlength="15" value="">
+			</tr>
+
+			<!-- 3행 -->
+			<tr>
+				<th>암호 확인 
+				<td><input type="password" name="pwd_confirm" size="20" maxlength="15" value="">
+			</tr>
+
+			<!-- 4행 -->
+			<tr>
+				<th>소유 스킬 
+				<td><input type="checkbox" name="skill" value="Java">Java
+					<input type="checkbox" name="skill" value="JSP">JSP
+					<input type="checkbox" name="skill" value="Spring">Spring
+					<input type="checkbox" name="skill" value="Oracle">Oracle
+					<input type="checkbox" name="skill" value="mybatis">mybatis
+			</tr>
+
+			<!-- 5행 -->
+			<tr>
+				<th>최종 학력
+				<td><input type="radio" name="school" value="고졸">고졸
+					<input type="radio" name="school" value="중졸">중졸
+					<input type="radio" name="school" value="대졸">대졸 
+			</tr>
+
+			<!-- 6행 -->
+			<tr>
+				<th>거주지 
+				<td>
+					<select name="addr">
+						<option value="">--선택--
+						<option value="서울">서울
+						<option value="경기">경기
+						<option value="인천">인천
+						<option value="충남">충남
+						<option value="충북">충북
+						<option value="충남">충남
+						<option value="전남">전남
+						<option value="전북">전북
+						<option value="경남">경남
+						<option value="경북">경북
+						<option value="강원">강원
+						<option value="제주">제주
+					
+					</select>
+			</tr>
+
+			<!-- 7행 -->
+			<tr>
+				<th>생일 
+				<td>
+					<!-- 년 -->
+					<select name="birth_year" onchange="checkBirthday();">
+						<script type="text/javascript">
+							document.write("<option value=''>");
+
+							var today = new Date();
+							var thisYear = today.getFullYear();
+
+							for(var i=thisYear; i>=1990; i--){
+
+								document.write("<option value='"+i+"'>"+i);
+							}
+
+
+						</script>
+					</select>년
+
+					<!-- 월 -->
+					<select name="birth_month" onchange="checkBirthday();">
+						<script type="text/javascript">
+							document.write("<option value=''>");
+
+
+							for(var i=1; i<=12; i++){
+								if(i>=10){
+									document.write("<option value='"+i+"'>"+i);
+								}else{
+									document.write("<option value='0"+i+"'>"+i);
+								}
+							}
+							
+
+
+						</script>
+					</select>월 
+
+					<!-- 일 -->
+					<select name="birth_date" onchange="checkBirthday();">
+						<script type="text/javascript">
+							document.write("<option value=''>");
+							for(var i=1; i<=31; i++){
+								if(i>=10){
+									document.write("<option value='"+i+"'>"+i);
+								}else{
+									document.write("<option value='0"+i+"'>"+i);
+								}
+							}
+						</script>
+					</select>일 
+					</tr>
+					<!--------------------------------------->
+					<tr>
+						<th>주민번호
+						<td>
+							<input type="text" name="jumin_num" value="" maxlength="7">
+					</tr>
+					<!--------------------------------------->
+					<tr>
+						<th>사진
+						<td>
+							<input type="file" name="pic">
+					</tr>
+					<!--------------------------------------->
+					<tr>
+						<th>경력
+						<td>
+							*회사명<input type="text" name="company_name">
+							직급<select name="jikup">
+									<option value="">--선택--
+									<option value="과장">과장
+									<option value="대리">대리
+									<option value="주임">주임
+									<option value="사원">사원
+							</select>
+							*연봉<input type="text" name="salary">
+					</tr>	
+					<!--------------------------------------->
+					<tr>
+						<th>숙지사항
+						<td>입력하신 개인 정보는 회사 소유입니다.
+							<input type="checkbox" name="is_confirm" value="확인">확인
+					</tr>
+			
+		</table>
+	</form>
+	<input type="button" value="저장" onclick="checkForm();">
+</body>
+</html>
+<script type="text/javascript">
+	document.memberRegForm.uid.value = "cshwan23";
+	document.memberRegForm.pwd.value = "tmdghks1039";
+	document.memberRegForm.pwd_confirm.value = "tmdghks1039";
+	document.memberRegForm.skill[0].checked = true;
+	document.memberRegForm.school[2].checked = true;
+	document.memberRegForm.addr.value = "서울";
+	document.memberRegForm.birth_year.value = "1990";
+	document.memberRegForm.birth_month.value = "02";
+	document.memberRegForm.birth_date.value = "03";
+	document.memberRegForm.jumin_num.value = "9002031";
+	document.memberRegForm.company_name.value = "melon";
+	document.memberRegForm.salary.value="70000000";
+</script>
+
+
+
+
+
+
+
+
+
+
+
